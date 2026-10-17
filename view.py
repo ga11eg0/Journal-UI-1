@@ -50,6 +50,7 @@ class Diary_UI:
 
     def update_book_list(self,options: list):
         self.book_list.config( values= options)
+        self.book_list.set("")
 
     def bind_open_book(self, callback):
         self.open_book_btn.config(command=callback)
@@ -76,7 +77,7 @@ class Diary_UI:
 
     def bind_on_pg_change(self,callback):
         self.text_page.bind("<KeyRelease>", callback)
-    
+     
     def view_get_text(self):
         return self.text_page.get("1.0", tk.END)
     
@@ -108,6 +109,9 @@ class Diary_UI:
 
     def bind_delete_btn (self, callback):
         self.del_book_btn.config(command=callback)
+
+    def bind_close_btn (self,callback): 
+        self.close_book_btn.config(command=callback)
     
     
 

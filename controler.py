@@ -3,13 +3,13 @@ from practice_model import journal,Initializer
 from view import Diary_UI
  
 class Journal_controler:
-
+ 
     def __init__(self,window):
         
         self.initi = Initializer
         self.model = journal
         self.view = Diary_UI(window)
-
+ 
         self.view.bind_open_book(self.open_book)
         self.view.bind_next_btn(self.next)
         self.view.bind_back_btn(self.back)
@@ -19,8 +19,9 @@ class Journal_controler:
         self.view.bind_new_book_btn(self.new_book)
         self.view.on_send_callback = self.create_book
         self.view.bind_delete_btn(self.delete_book)
+        self.view.bind_close_btn(self.close_book)
    
-      
+        #current book will store the journal object 
         self.current_book = None
         self.i_index = 1 
         self.f_index = 1
@@ -36,16 +37,21 @@ class Journal_controler:
         self.view.update_book_list(books)  
 
     def open_book(self):
+        print("open book btn pressed")
         option = self.view.chosen.get()
-        print("opcion elegida, ", option)
-        self.current_book = self.model.load_journal(option)
-        print(self.current_book.get_index_page_content(1))
-        self.view.view_set_text(self.current_book.get_index_page_content(1))
-        self.i_index = 1
-        self.f_index = self.current_book.get_num_pages()
-        index = "1/"+str(self.f_index)
-        self.view.view_set_index(index)
-        
+        print("opcion elegida, ", option,len(option))
+        if len(option) > 0: 
+            self.current_book = self.model.load_journal(option)
+            print(self.current_book.get_index_page_content(1))
+            self.view.view_set_text(self.current_book.get_index_page_content(1))
+            self.i_index = 1
+            self.f_index = self.current_book.get_num_pages()
+            index = "1/"+str(self.f_index)
+            self.view.view_set_index(index)
+
+    def close_book(self): 
+        print("close book btn pressed")
+        self.update_view()
 
     def set_text(self, index: int):
         a = 9
@@ -75,15 +81,16 @@ class Journal_controler:
 
     def add_pg(self):
         print("add page btn pressed")
-        print(self.current_book.pages)
-        self.current_book.add_page()
-        print(self.current_book.pages)
-        self.f_index += 1
-        self.i_index = self.f_index
-        self.view.view_set_text(self.current_book.get_index_page_content(self.i_index))
-        index = str(self.i_index)+"/"+str(self.f_index)
-        self.view.view_set_index(index)
-        self.current_book.save_changes()
+        if self.current_book != None: 
+            print(self.current_book.pages)
+            self.current_book.add_page()
+            print(self.current_book.pages)
+            self.f_index += 1
+            self.i_index = self.f_index
+            self.view.view_set_text(self.current_book.get_index_page_content(self.i_index))
+            index = str(self.i_index)+"/"+str(self.f_index)
+            self.view.view_set_index(index)
+            self.current_book.save_changes()
     
     def del_pg(self):
         if self.i_index > 1 :
@@ -100,13 +107,17 @@ class Journal_controler:
     
     def update_changes(self,event):
         print("text is being changed")
-        text = self.view.view_get_text()
-        print(text)
-        self.current_book.write_content(self.i_index,text)
-        self.current_book.save_changes()
+        if self.current_book != None:
+            text = self.view.view_get_text()
+            print(text)
+            self.current_book.write_content(self.i_index,text)
+            self.current_book.save_changes()
         
     def update_view(self):
         self.set_book_list()
+        self.current_book = None
+        self.view.view_set_text("")
+        self.view.view_set_index("")
         print("current book",self.current_book)
 
     def new_book(self):
@@ -129,13 +140,14 @@ class Journal_controler:
         
     def delete_book(self):
         print("delete book btn pressed ")
-        self.current_book.dele_file(self.current_book.name)
-        books = self.initi.get_available_books()
-        print(books)
-        self.view.update_book_list(books)  
-        self.current_book = None
-        self.view.view_set_text("")
-        self.view.view_set_index("")
+        if self.current_book != None:
+            self.current_book.dele_file(self.current_book.name)
+            books = self.initi.get_available_books()
+            print(books)
+            self.view.update_book_list(books)  
+            self.current_book = None
+            self.view.view_set_text("")
+            self.view.view_set_index("")
    
 
 if __name__ == "__main__":

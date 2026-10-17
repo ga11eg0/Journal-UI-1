@@ -220,7 +220,7 @@ def return_list_book():
         print(names_directory)
         return names_directory
 
-print(" jdkjdelkkkdñdlñdldñld ")
-ty= journal("journal 4",[])
-print(ty.name)
-ty.creates_new_jornal()
+#print(" jdkjdelkkkdñdlñdldñld ")
+#ty= journal("journal 4",[])
+#print(ty.name)
+#ty.creates_new_jornal()
