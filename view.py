@@ -34,6 +34,9 @@ class Diary_UI:
         self.add_pag_btn = tk.Button(window, text= "add pg",font= "arial 12", bg =  "#51F142")
         self.add_pag_btn.place(x= 280, y = 20,width= 60, height= 40)
 
+        self.Book_name_lab = tk.Label(window, text="title", font="arial 12")
+        self.Book_name_lab.place(x=400, y = 20, height=40)
+
         self.back_btn = tk.Button(window, text= "Back",font= "arial 12", bg =  "#E7DA1E")
         self.back_btn.place(x= 390, y = 60,width= 100, height= 40)
         
@@ -62,6 +65,9 @@ class Diary_UI:
     def view_set_index(self,index):
         self.index_box.delete("1.0", tk.END)
         self.index_box.insert("1.0",index)
+
+    def view_set_title(self,txt): 
+        self.Book_name_lab.config(text=txt)
 
     def bind_next_btn(self,callback):
         self.next_btn.config(command=callback)

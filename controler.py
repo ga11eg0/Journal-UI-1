@@ -9,6 +9,7 @@ class Journal_controler:
         self.initi = Initializer
         self.model = journal
         self.view = Diary_UI(window)
+
  
         self.view.bind_open_book(self.open_book)
         self.view.bind_next_btn(self.next)
@@ -48,6 +49,7 @@ class Journal_controler:
             self.f_index = self.current_book.get_num_pages()
             index = "1/"+str(self.f_index)
             self.view.view_set_index(index)
+            self.view.view_set_title(self.current_book.name)
 
     def close_book(self): 
         print("close book btn pressed")
@@ -112,6 +114,7 @@ class Journal_controler:
             print(text)
             self.current_book.write_content(self.i_index,text)
             self.current_book.save_changes()
+            
         
     def update_view(self):
         self.set_book_list()
@@ -119,6 +122,7 @@ class Journal_controler:
         self.view.view_set_text("")
         self.view.view_set_index("")
         print("current book",self.current_book)
+        self.view.view_set_title("")
 
     def new_book(self):
         print("new book btn pressed")

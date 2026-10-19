@@ -1,11 +1,80 @@
 import json
 from pathlib import Path
- 
+
+#create or get the folder where the database is saved 
+def get_base_dir(): 
+
+    app_name = "DiaryPy"
+    base_dir= Path.home()/app_name
+
+    #creates the directory if it doesnt exists
+    base_dir.mkdir(parents=True,exist_ok=True)
+
+    return base_dir
+
+#gets create the books directory 
+def get_books_dir(): 
+
+        app_name = "DiaryPy"
+        base_dir= Path.home()/app_name/"books"
+
+        #creates the directory if it doesnt exists
+        base_dir.mkdir(parents=True,exist_ok=True)
+
+
+        return base_dir
+#creates or get the directory path
+def get_create_dirrectory_file(): 
+
+        books_dir = get_books_dir()
+        directoryPath= books_dir/"directory.json"
+
+        if not directoryPath.exists():
+            with open(directoryPath,'w',encoding='utf-8') as f: 
+                json.dump([],f,indent=4)
+
+        return directoryPath
+
 class journal():
     
     def __init__(self,name: str, pages:list):
         self.name = name
         self.pages = pages
+
+    #create or get the directory where files will be saved 
+    def get_base_dir(self): 
+
+        app_name = "DiaryPy"
+        base_dir= Path.home()/app_name
+
+        #creates the directory if it doesnt exists
+        base_dir.mkdir(parents=True,exist_ok=True)
+
+        return base_dir
+    
+    #create or get the directory where files will be saved 
+    def get_books_dir(self): 
+
+        app_name = "DiaryPy"
+        base_dir= Path.home()/app_name/"books"
+
+        #creates the directory if it doesnt exists
+        base_dir.mkdir(parents=True,exist_ok=True)
+
+
+        return base_dir
+
+
+    def get_create_dirrectory_file(self): 
+
+        books_dir = self.get_books_dir()
+        directoryPath= books_dir/"directory.json"
+
+        if not directoryPath.exists():
+            with open(directoryPath,'w',encoding='utf-8') as f: 
+                json.dump([],f,indent=4)
+
+        return directoryPath
 
     # return the number of pages in total 
     def get_num_pages(self):
@@ -46,8 +115,8 @@ class journal():
     def this_file_exists(self,filename:str):
 
         try: 
-            base_dir = Path(__file__).resolve().parent
-            sub_dir= str(base_dir)+"/books/directory.json"
+            
+            sub_dir= get_create_dirrectory_file()
             with open(sub_dir,"r") as file:
                 names_directory = json.load(file)
 
@@ -57,14 +126,13 @@ class journal():
             
             return False
         except:
-            print("ubavle to read directory,json")
+            print("unable to read directory,json")
             pass
     # saves names of files in directory 
     def include_file(self, filename):
 
         try:
-            base_dir = Path(__file__).resolve().parent
-            sub_dir= str(base_dir)+"/books/directory.json" 
+            sub_dir= self.get_create_dirrectory_file()
             # opens an reads file
             with open(sub_dir,"r") as file:
                 names_directory = json.load(file)
@@ -83,8 +151,8 @@ class journal():
     def dele_file(self,filename):
 
         try: 
-            base_dir = Path(__file__).resolve().parent
-            sub_dir= str(base_dir)+"/books/directory.json"
+            
+            sub_dir= get_create_dirrectory_file()
             #checks if file exist 
             filename = filename+".json"
             if self.this_file_exists(filename) == True:
@@ -97,7 +165,7 @@ class journal():
                     json.dump(names_directory,file, indent=4)
                 print(filename," deleted from list succesfully")
             
-                file_path = "books/"+filename
+                file_path = get_books_dir()+"/"+filename
                 file_to_delete = Path(file_path)
                 file_to_delete.unlink(missing_ok=True)
                 print(filename," deleted from directory succesfully")
@@ -113,7 +181,7 @@ class journal():
 
         file_name= str(self.name)+".json"
         if self.this_file_exists(file_name) == False:
-            str_path = "books/"+self.name+".json"
+            str_path = str(self.get_books_dir())+"/"+self.name+".json"
             filepath = Path(str_path)
             """Serializes the current object's data and writes it to a JSON file."""
             # 1. Convert the object state to a dictionary
@@ -136,7 +204,7 @@ class journal():
     def save_changes(self):
 
         file_name= str(self.name)+".json"
-        base_dir = Path(__file__).resolve().parent
+        base_dir = self.get_base_dir()
         
         if self.this_file_exists(file_name) == True:
             str_path = str(base_dir)+"/books/"+self.name+".json"
@@ -159,7 +227,7 @@ class journal():
     def get_journal_list(self):
 
         try: 
-            with open("books/directory.json") as file:
+            with open(get_create_dirrectory_file()) as file:
                 names_directory = json.load(file)
 
                 return names_directory
@@ -173,10 +241,10 @@ class journal():
     def load_journal(cls,filename):
         
         try: 
-            base_dir = Path(__file__).resolve().parent
-            sub_dir= str(base_dir)+"/books/"
-            file_path = sub_dir+filename
-            file_full_path = Path(file_path)
+            
+            
+            file_full_path = get_books_dir()/filename
+
             with open(file_full_path,"r") as file: 
                 journal_data = json.load(file)
             
@@ -186,6 +254,8 @@ class journal():
             )
         except:
             print(filename, "could not be open")
+
+
 
 class Initializer():
 
@@ -197,8 +267,7 @@ class Initializer():
     @classmethod
     def get_available_books(self):
 
-        base_dir = Path(__file__).resolve().parent
-        sub_dir= str(base_dir)+"/books/directory.json"
+        sub_dir= get_create_dirrectory_file()
         print(sub_dir)
         with open(sub_dir) as file:
             names_directory = json.load(file)
@@ -212,8 +281,8 @@ class Initializer():
 
 
 def return_list_book():
-    base_dir = Path(__file__).resolve().parent
-    sub_dir= str(base_dir)+"/books/directory.json"
+    
+    sub_dir= get_create_dirrectory_file()
     print(sub_dir)
     with open(sub_dir) as file:
         names_directory = json.load(file)
