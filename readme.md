@@ -9,6 +9,15 @@ this project uses python and the library tkinter for the user interface
 en /dist se encuentra el archivo compilado para linux, el cual deberia funcionar sin nececidad de descargar paquetes adicionales
 in /dist you can find the compiled version that should run in linux operating systems without having to download anything 
 
-user interface 
+user interface
+ 
 ![screenshot](gallery/sc01.png)
+
+creating journal
+
+![screenshot](gallery/sc02.png)
+
+opened journal
+
+![screenshot](gallery/sc03.png)
 
