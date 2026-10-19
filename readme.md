@@ -10,4 +10,5 @@ en /dist se encuentra el archivo compilado para linux, el cual deberia funcionar
 in /dist you can find the compiled version that should run in linux operating systems without having to download anything 
 
 user interface 
-![screenshot](gallery/sc01.png
+![screenshot](gallery/sc01.png)
+
